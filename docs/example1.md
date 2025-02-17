@@ -1,3 +1,10 @@
+## Structure constants of the Lie Algebra:
+$(0, 0)(0, 0)(0, 0)(15, 1)(0, 0)(13, 1)$
+
+### Symplectic form
+ $\omega=	1\cdot e^{12}+1\cdot e^{34}+1\cdot e^{56}+$
+
+### Derivatives
 $d(e^{ 234 })  = e^{ 1235 }$
 
 $d(e^{ 246 })  = (-1)e^{ 1234 } + e^{ 1256 }$
@@ -18,5 +25,5 @@ $d(e^{ 46 })  = (-1)e^{ 134 } + e^{ 156 }$
 
 $d(e^{ 56 })  = (-1)e^{ 135 }$
 
-$d \Lambda d( 2e^{ 135 })  = 2e^{ 135 }$
+$d \Lambda d( e^{ 246 })  = (-2)e^{ 135 }$
 
