@@ -52,18 +52,12 @@ struct PairLists {
     std::vector<Pair> list2;
 };
 
-inline PairLists readPairLists(const std::string &filename) {
+inline PairLists readPairLists(const std::string &line1, const std::string &line2) {
     PairLists result;
-    std::ifstream input(filename);
-    if (!input) {
-        std::cerr << "Error opening file " << filename << "\n";
-        return result;
-    }
-    std::string line;
-    if (std::getline(input, line))
-        result.list1 = parseLine(line);
-    if (std::getline(input, line))
-        result.list2 = parseLine(line);
+
+    result.list1 = parseLine(line1);
+    result.list2 = parseLine(line2);
+    
     return result;
 }
 

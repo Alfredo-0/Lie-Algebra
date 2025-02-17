@@ -1,5 +1,4 @@
 //DifferentialForm.h
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -42,9 +41,9 @@ class LieAlgebra;
 
 class DifferentialForm {
 private:
-    std::map<std::array<int, DIMENSION>, double> terms;
     int degree;
 public:
+    std::map<std::array<int, DIMENSION>, double> terms;//change!
 
     inline static std::shared_ptr<LieAlgebra> algebra = nullptr;
 

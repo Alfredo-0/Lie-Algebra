@@ -1,6 +1,13 @@
 //DifferentialForm.cpp
-
 #include "Lie-Alg/DifferentialForm.h"
+
+bool comp(int i, int j){
+    if(i == 0 && j != 0)
+        return false;
+    if(i!= 0 && j == 0)
+        return true;
+    return (i < j);
+}
 
 void DifferentialForm::print() const {
     std::string index = " ";
@@ -20,7 +27,7 @@ void DifferentialForm::print() const {
 
         if(!indices.empty()){
             index = " ";
-            for(auto i: indices){
+            for(auto const& i: indices){
                 if(i == 0)
                     continue;
                 index += std::to_string(i);
@@ -43,10 +50,10 @@ bool DifferentialForm::checkZero() const{
 }
 
 void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, double coeff) {
-    int sign = 1;
+    double sign = 1.0;
     
     std::array<int, DIMENSION> sortedIndices = indices;
-    std::sort(sortedIndices.begin(), sortedIndices.begin()+degree);
+    std::sort(sortedIndices.begin(), sortedIndices.end(), comp);
 
     for (int i= 0; i< degree; ++i) {
         for (int j = i + 1; j < degree; ++j) {
@@ -54,8 +61,9 @@ void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, double
                 sign = -sign;
         }
     }
-    
     terms[sortedIndices] += (sign)*coeff;
+    if(terms[sortedIndices] == 0)
+        terms.erase(sortedIndices);
 }
 
 DifferentialForm DifferentialForm::wedge(const DifferentialForm& other) const {
@@ -193,7 +201,7 @@ std::string DifferentialForm::toLaTeX() const {
 
         if(!indices.empty()){
             index = " ";
-            for(auto i: indices){
+            for(auto const& i: indices){
                 if(i == 0)
                     continue;
                 index += std::to_string(i);
