@@ -19,7 +19,7 @@ int main() {
     
     std::string line1;
     std::string line2;
-
+ 
     while(std::getline(file, line1)){
         
         if(line1.length() == 0)
@@ -31,16 +31,25 @@ int main() {
         DifferentialForm::algebra = std::make_shared<LieAlgebra>(lists.list1);
 
         DifferentialForm omega(2);
-        for(const auto &p : lists.list2)    
-            omega.addTerm({p.left/10, p.left%10}, p.right);
+
+        for(const auto &terms : lists.list2)
+            for(const auto &p : terms)    
+                omega.addTerm({p.left/10, p.left%10}, p.right);
 
         omega.inverse();
         
-        outfile << "## Structure constants of the Lie Algebra:\n$";
-        for (const auto &p : lists.list1){
-            outfile << "(" << p.left<< ", " << p.right << ")";
+        outfile << "## Structure constants of the Lie Algebra:\n";
+
+        outfile << "$(";
+        for(const auto &terms : lists.list1){
+            
+            for(const auto &p : terms){
+                outfile << p.right << " \\cdot " << p.left << " ";
+            }
+            outfile << ", ";
         }
-        outfile << "$\n\n";
+        outfile << ")$. \n\n";
+        
         outfile << "### Symplectic form\n $\\omega=" << omega.toLaTeX()<<"$\n\n";
         
 
@@ -62,18 +71,6 @@ int main() {
                 outfile << "$d("<<alpha.toLaTeX() << ")  = " << dalpha.toLaTeX() << "$\n\n"; 
             }            
         }
-
-        /* 
-        for(const auto& it : basis_3forms){
-            DifferentialForm alpha(3);
-            alpha.addTerm({it.i, it.j, it.k}, 1.0);
-            DifferentialForm nonPrimitive = alpha.wedge(omega);
-
-            if(!nonPrimitive.checkZero()){
-                outfile << "$" << alpha.toLaTeX() << " \\wedge \\omega = " << nonPrimitive.toLaTeX() << "$\n\n"; 
-            }            
-        }
-        */
 
         outfile<<"### Derivatives of $2-$forms\n";
         
@@ -109,7 +106,7 @@ int main() {
                  
         outfile << "\\pagebreak\n\n";
     }
-
+ 
 
     outfile.close();
     return 0;

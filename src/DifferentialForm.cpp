@@ -234,17 +234,18 @@ std::string DifferentialForm::toLaTeX() const {
     return ss.str();
 }
 
-LieAlgebra::LieAlgebra(std::vector<Pair> str) {
+LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
     std::cout << "Lie Algebra constructed.\n";
     
     for (int i = 0; i < DIMENSION; ++i) {
         DifferentialForm dEi(2);
         structureConstants[i] = dEi;
     }
-
-    for(int it = 0; it < str.size(); it++){
-        if(str[it].left != 0){
-            structureConstants[it].addTerm({str[it].left/10, str[it].left%10}, str[it].right);
+    for(const auto& terms: str){
+        for(int it = 0; it < terms.size(); it++){
+            if(terms[it].left != 0){
+                structureConstants[it].addTerm({terms[it].left/10, terms[it].left%10}, terms[it].right);
+            }
         }
     }
 }

@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/LIE-ALG.dir/link.d "CMakeFiles/LIE-ALG.dir/src/DifferentialForm.cpp.o" "CMakeFiles/LIE-ALG.dir/src/main.cpp.o" -o LIE-ALG

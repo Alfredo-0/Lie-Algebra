@@ -78,7 +78,7 @@ private:
 
 public:
     
-    LieAlgebra(std::vector<Pair> str);
+    LieAlgebra(std::vector<std::vector<Pair>> str);
 
     DifferentialForm dOf(int i) const {
         return structureConstants[i-1];

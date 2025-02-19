@@ -1,3 +1,0 @@
-/home/alfredo/Desktop/Lie-Algebra/build/CMakeFiles/LIE-ALG.dir
-/home/alfredo/Desktop/Lie-Algebra/build/CMakeFiles/edit_cache.dir
-/home/alfredo/Desktop/Lie-Algebra/build/CMakeFiles/rebuild_cache.dir
