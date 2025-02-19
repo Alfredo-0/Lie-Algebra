@@ -184,6 +184,26 @@ DifferentialForm DifferentialForm::interiorProduct(const DifferentialForm& other
     return result;
 }
 
+DifferentialForm DifferentialForm::inverse() const {
+    DifferentialForm inverse(2);
+
+    for(auto const& [indices, coeff] : terms){
+        if (indices[0] % 2 == 1){
+            if ( (indices[1]-1) < (indices[0] + 1))
+                inverse.addTerm({indices[1]-1, indices[0] + 1}, 1/coeff);
+            else 
+                inverse.addTerm({indices[0] + 1, indices[1]-1}, -1/coeff);
+        }
+        else{
+            if ( (indices[1] + 1) < (indices[0] - 1))
+                inverse.addTerm({indices[1] + 1, indices[0] - 1}, 1/coeff);
+            else 
+                inverse.addTerm({indices[0] - 1, indices[1] + 1}, -1/coeff);
+        }
+    }
+    return inverse;
+}
+
 std::string DifferentialForm::toLaTeX() const {
     std::stringstream ss;
     std::string index = " ";

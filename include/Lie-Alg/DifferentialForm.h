@@ -68,6 +68,8 @@ public:
 
     DifferentialForm interiorProduct(const DifferentialForm& other) const;
 
+    DifferentialForm inverse() const;
+
 };
 
 class LieAlgebra {

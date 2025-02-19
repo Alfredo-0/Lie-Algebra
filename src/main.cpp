@@ -33,7 +33,8 @@ int main() {
         DifferentialForm omega(2);
         for(const auto &p : lists.list2)    
             omega.addTerm({p.left/10, p.left%10}, p.right);
-        omega.print();
+
+        omega.inverse();
         
         outfile << "## Structure constants of the Lie Algebra:\n$";
         for (const auto &p : lists.list1){
@@ -42,7 +43,6 @@ int main() {
         outfile << "$\n\n";
         outfile << "### Symplectic form\n $\\omega=" << omega.toLaTeX()<<"$\n\n";
         
-        outfile<<"### Derivatives\n";
 
         if(omega.exteriorDerivative().checkZero())
             std::cout<<"The symplectic form is closed!\n";
@@ -50,6 +50,8 @@ int main() {
             std::cout<<"The symplectic form is not closed!\n";
             omega.exteriorDerivative().print();
         }
+
+        outfile<<"### Derivatives of $3-$forms\n";
 
         for(const auto& it : basis_3forms){
             DifferentialForm alpha(3);
@@ -60,6 +62,20 @@ int main() {
                 outfile << "$d("<<alpha.toLaTeX() << ")  = " << dalpha.toLaTeX() << "$\n\n"; 
             }            
         }
+
+        /* 
+        for(const auto& it : basis_3forms){
+            DifferentialForm alpha(3);
+            alpha.addTerm({it.i, it.j, it.k}, 1.0);
+            DifferentialForm nonPrimitive = alpha.wedge(omega);
+
+            if(!nonPrimitive.checkZero()){
+                outfile << "$" << alpha.toLaTeX() << " \\wedge \\omega = " << nonPrimitive.toLaTeX() << "$\n\n"; 
+            }            
+        }
+        */
+
+        outfile<<"### Derivatives of $2-$forms\n";
         
         for(const auto& it : basis_2forms){
             DifferentialForm beta(2);
@@ -71,6 +87,8 @@ int main() {
             }
             
         }   
+
+        outfile<<"### $d \\Lambda d$ of $3-$forms\n";
         
         for(const auto& it : basis_3forms){
             DifferentialForm gamma(3);
@@ -81,7 +99,7 @@ int main() {
             gamma.addTerm({it.i, it.j, it.k}, 1.0);
             
             dgamma = gamma.exteriorDerivative();
-            ldgamma = dgamma.interiorProduct(omega);            
+            ldgamma = dgamma.interiorProduct(omega.inverse());            
             dldgamma = ldgamma.exteriorDerivative();
 
             if(!dldgamma.checkZero()){
@@ -91,6 +109,7 @@ int main() {
                  
         outfile << "\\pagebreak\n\n";
     }
+
 
     outfile.close();
     return 0;
