@@ -210,7 +210,6 @@ std::string DifferentialForm::toLaTeX() const {
     bool firstTerm = true;
 
     for (auto& [indices, coeff]: terms){
-
         if(!firstTerm)
             ss<<" + ";
 
@@ -241,10 +240,10 @@ LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
         DifferentialForm dEi(2);
         structureConstants[i] = dEi;
     }
-    for(const auto& terms: str){
-        for(int it = 0; it < terms.size(); it++){
-            if(terms[it].left != 0){
-                structureConstants[it].addTerm({terms[it].left/10, terms[it].left%10}, terms[it].right);
+    for(int it = 0; it < str.size(); it++){
+        for(const auto& terms: str[it]){
+            if(terms.left != 0){
+                structureConstants[it].addTerm({terms.left/10, terms.left%10}, terms.right);
             }
         }
     }
