@@ -1,17 +1,17 @@
 //main.cpp
-#include <Lie-Alg/DifferentialForm.h>
+#include "Lie-Alg/DifferentialForm.h"
 #include "Lie-Alg/PairUtils.h"
 #include <iostream>
 
 int main() {
     
-    std::ifstream file("../res/input.txt");
+    std::ifstream file("../../res/input.txt");
     if (!file) {
         std::cerr << "Error: Could not open input.txt for reading." << std::endl;
         return 1;
     }
     
-    std::ofstream outfile("../output.md");
+    std::ofstream outfile("../../output.md");
     if (!outfile) {
         std::cerr << "Error: Could not open output.md for writing." << std::endl;
         return 1;
@@ -35,7 +35,7 @@ int main() {
                 omega.addTerm({p.left/10, p.left%10}, p.right);
 
         omega.inverse();
-        
+
         outfile << "## Structure constants of the Lie Algebra:\n";
         outfile << "$(";
 

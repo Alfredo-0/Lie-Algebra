@@ -4,7 +4,7 @@
 bool comp(int i, int j){
     if(i == 0 && j != 0)
         return false;
-    if(i!= 0 && j == 0)
+    if(i != 0 && j == 0)
         return true;
     return (i < j);
 }
@@ -50,12 +50,22 @@ bool DifferentialForm::checkZero() const{
 }
 
 void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, double coeff) {
+    if (!degree_assigned) {
+        int computed_degree = 0;
+        for (int idx : indices){
+            if (idx != 0)
+                ++computed_degree;
+        }
+        degree = computed_degree;
+        degree_assigned = true;
+    }
+    
     double sign = 1.0;
     
     std::array<int, DIMENSION> sortedIndices = indices;
     std::sort(sortedIndices.begin(), sortedIndices.end(), comp);
 
-    for (int i= 0; i< degree; ++i) {
+    for (int i = 0; i < degree; ++i) {
         for (int j = i + 1; j < degree; ++j) {
             if (indices[i] > indices[j]) 
                 sign = -sign;
@@ -68,6 +78,7 @@ void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, double
 
 DifferentialForm DifferentialForm::wedge(const DifferentialForm& other) const {
     int value = degree + other.degree;
+
     DifferentialForm result(value);
     bool duplicate = false;
     std::array<int, DIMENSION> combined;
@@ -75,29 +86,27 @@ DifferentialForm DifferentialForm::wedge(const DifferentialForm& other) const {
 
     for (const auto& [indices1, coeff1] : this->terms) {
         for (auto& [indices2, coeff2] : other.terms) {
-
-            for(int i = 0; i < DIMENSION; ++i){
-                if (i < degree)
-                    combined[i] = indices1[i];
-                else if (i < degree + other.degree)
-                    combined[i] = indices2[i-degree];
-                else 
-                    combined[i] = 0;
-            }
-
-            duplicate = false;
+            combined = {0};
             count = {0};
-            
-            for (int& idx : combined) {
-                if (++count[idx-1] == 2){
+
+            for(int i = 0; i < value; ++i){
+                if (i < degree){
+                    combined[i] = indices1[i];
+                    count[combined[i] - 1]++;
+                }
+                else if (i < degree + other.degree){
+                    combined[i] = indices2[i-degree];
+                    count[combined[i] - 1]++;
+                }
+                else if (count[combined[i] - 1] > 1){
                     duplicate = true;
-                    break; 
+                    break;
                 }
             }
 
-            if (duplicate) 
+            if (duplicate)
                 continue;
-            
+
             result.addTerm(combined, coeff1 * coeff2);
         }
     } 
@@ -177,7 +186,6 @@ DifferentialForm DifferentialForm::interiorProduct(const DifferentialForm& other
 
             if (j == other.degree){
                 result.addTerm(remaining, sign*coeff*coeff2);
-                //result.print();
             }
         }
     }
@@ -236,7 +244,7 @@ std::string DifferentialForm::toLaTeX() const {
 LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
     std::cout << "Lie Algebra constructed.\n";
     
-    for (int i = 0; i < DIMENSION; ++i) {
+    for (int i = 0; i < 6; ++i) {
         DifferentialForm dEi(2);
         structureConstants[i] = dEi;
     }

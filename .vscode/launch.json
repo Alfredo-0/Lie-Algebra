@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Debug LIE-ALG",
+          "type": "cppvsdbg",
+          "request": "launch",
+          "program": "${workspaceFolder}/build/Debug/LIE-ALG.exe",
+          "args": [],
+          "stopAtEntry": false,
+          "cwd": "${workspaceFolder}/build/Debug",
+          "environment": [],
+          "externalConsole": false
+      }
+  ]
+}
