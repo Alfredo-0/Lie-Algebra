@@ -78,11 +78,10 @@ void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, double
 
 DifferentialForm DifferentialForm::wedge(const DifferentialForm& other) const {
     int value = degree + other.degree;
-
-    DifferentialForm result(value);
     bool duplicate = false;
-    std::array<int, DIMENSION> combined;
-    std::array<int, DIMENSION> count = {0};
+
+    std::array<int, DIMENSION> combined = {0}, count = {0};
+    DifferentialForm result(value);
 
     for (const auto& [indices1, coeff1] : this->terms) {
         for (auto& [indices2, coeff2] : other.terms) {
@@ -126,7 +125,6 @@ DifferentialForm DifferentialForm::exteriorDerivative() const {
     int aux = 0;
 
     for (const auto& [indices, coeff] : this->terms) {
-        
         for (int j = 0; j < degree; ++j) {
             aux = 0;
             remaining = {0};
@@ -144,7 +142,7 @@ DifferentialForm DifferentialForm::exteriorDerivative() const {
             
             remainingForm.addTerm(remaining, sign*coeff);
             
-            result += remainingForm.wedge(algebra->dOf(indices[j])); 
+            result += remainingForm.wedge(algebra->dOf(indices[j] - 1)); 
             
         }
     }
@@ -248,6 +246,7 @@ LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
         DifferentialForm dEi(2);
         structureConstants[i] = dEi;
     }
+    
     for(int it = 0; it < str.size(); it++){
         for(const auto& terms: str[it]){
             if(terms.left != 0){
