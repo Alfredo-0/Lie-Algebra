@@ -42,7 +42,7 @@ int main() {
                 outfile << 0;
             outfile << omega.algebra->dOf(it).toLaTeX();
             if (it != 5)
-                outfile << ", \\";
+                outfile << ",\\ ";
         }
         outfile << ")$ \n\n";
 

@@ -97,7 +97,8 @@ DifferentialForm DifferentialForm::wedge(const DifferentialForm& other) const {
                     combined[i] = indices2[i-degree];
                     count[combined[i] - 1]++;
                 }
-                else if (count[combined[i] - 1] > 1){
+                
+                if (count[combined[i] - 1] > 1){
                     duplicate = true;
                     break;
                 }
@@ -121,7 +122,7 @@ DifferentialForm& DifferentialForm::operator +=(const DifferentialForm& other){
 
 DifferentialForm DifferentialForm::exteriorDerivative() const {
     DifferentialForm result(degree + 1);
-    std::array<int, DIMENSION> remaining = {};
+    std::array<int, DIMENSION> remaining = {0};
     int aux = 0;
 
     for (const auto& [indices, coeff] : this->terms) {
@@ -136,16 +137,14 @@ DifferentialForm DifferentialForm::exteriorDerivative() const {
                 }
             }
             
-            DifferentialForm remainingForm(degree - 1);
-
             double sign = ((j + 1) % 2 == 0) ? -1.0 : 1.0;
             
-            remainingForm.addTerm(remaining, sign*coeff);
+            DifferentialForm remainingForm(remaining, sign*coeff);
             
             result += remainingForm.wedge(algebra->dOf(indices[j] - 1)); 
-            
         }
     }
+
     return result;
 }
 
@@ -158,20 +157,18 @@ DifferentialForm DifferentialForm::interiorProduct(const DifferentialForm& other
 
     for (const auto& [indices, coeff] : this->terms) { 
         for (const auto& [indices2, coeff2] : other.terms) {
-            int i = 0;
-            int j = 0;
-            int k = 0;
+            int i = 0, j = 0, k = 0;
             sign = 1.0;
             remaining = {0};
             while(i < degree && j < other.degree){
                 if (indices[i] == indices2[j]){
-                    aux = ((j+i) % 2 == 0) ? 1.0 : -1.0; 
+                    aux = ((j + i) % 2 == 0) ? 1.0 : -1.0; 
                     sign *= aux;
                     ++j;
                     ++i;
                 }
                 else{
-                    remaining[k]= indices[i];
+                    remaining[k] = indices[i];
                     ++k;
                     ++i;
                 }
@@ -194,18 +191,7 @@ DifferentialForm DifferentialForm::inverse() const {
     DifferentialForm inverse(2);
 
     for(auto const& [indices, coeff] : terms){
-        if (indices[0] % 2 == 1){
-            if ( (indices[1]-1) < (indices[0] + 1))
-                inverse.addTerm({indices[1]-1, indices[0] + 1}, 1/coeff);
-            else 
-                inverse.addTerm({indices[0] + 1, indices[1]-1}, -1/coeff);
-        }
-        else{
-            if ( (indices[1] + 1) < (indices[0] - 1))
-                inverse.addTerm({indices[1] + 1, indices[0] - 1}, 1/coeff);
-            else 
-                inverse.addTerm({indices[0] - 1, indices[1] + 1}, -1/coeff);
-        }
+        inverse.addTerm({indices[0], indices[1]}, 1/coeff);
     }
     return inverse;
 }
