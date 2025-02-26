@@ -119,6 +119,10 @@ struct PairComparator {
     bool operator()(const std::pair<DifferentialForm, DifferentialForm>& a,
                     const std::pair<DifferentialForm, DifferentialForm>& b) const {
         Comparator cmp;
-        return cmp(a.first, b.first);
+        if (cmp(a.first, b.first))
+            return true;
+        if (cmp(b.first, a.first))
+            return false;
+        return cmp(a.second, b.second);
     }
 };
