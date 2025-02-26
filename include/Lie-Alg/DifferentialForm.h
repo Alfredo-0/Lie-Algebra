@@ -37,6 +37,9 @@ const std::array<Pairs, 15> basis_2forms = {{
     {3,5}, {3,6}, {4,5}, {4,6}, {5,6}
 }};
 
+struct Comparator;
+struct PairComparator;
+
 class LieAlgebra;
 
 class DifferentialForm {
@@ -46,36 +49,37 @@ class DifferentialForm {
     
     public:
     inline static std::shared_ptr<LieAlgebra> algebra = nullptr;
-    
-    DifferentialForm() : degree(0), degree_assigned(false) {}
-    
-    DifferentialForm(const std::array<int, DIMENSION>& indices, double coeff)
-        : degree(0), degree_assigned(false) {
-        addTerm(indices, coeff);
-    }
 
     DifferentialForm(int d) : degree(d), degree_assigned(true) { }
+    
+    DifferentialForm(const std::array<int, DIMENSION>& indices, double coeff)
+    : degree(0), degree_assigned(false) {
+        addTerm(indices, coeff);
+    }
+    
+    DifferentialForm() : degree(0), degree_assigned(false) {}   
 
     ~DifferentialForm() {}
 
     void addTerm(const std::array<int, DIMENSION>& indices, double coeff);
-
-    void print() const;
-
+    
+    friend struct Comparator;
+    
     std::string toLaTeX() const;
-
+    
     bool checkZero() const;
-
+    
     DifferentialForm wedge(const DifferentialForm& other) const;
     
     DifferentialForm exteriorDerivative() const;
-
+    
     DifferentialForm& operator +=(const DifferentialForm& other);
-
+    
     DifferentialForm interiorProduct(const DifferentialForm& other) const;
-
+    
     DifferentialForm inverse() const;
-
+    
+    void print() const;
 };
 
 class LieAlgebra {
@@ -88,4 +92,33 @@ public:
         return structureConstants[i];
     }
 
+};
+
+struct Comparator {
+    bool operator()(const DifferentialForm& a, const DifferentialForm b) const {
+        auto itA = a.terms.begin();
+        auto itB = b.terms.begin();
+
+        while (itA != a.terms.end() && itB != b.terms.end()) {
+            if (std::lexicographical_compare(itA->first.begin(), itA->first.end(),
+                                             itB->first.begin(), itB->first.end()))
+                return true;
+            if (std::lexicographical_compare(itB->first.begin(), itB->first.end(),
+                                             itA->first.begin(), itA->first.end()))
+                return false;
+            if (itA->second != itB->second)
+                return itA->second < itB->second;
+            ++itA;
+            ++itB;
+        }
+        return a.terms.size() < b.terms.size();
+    }
+};
+
+struct PairComparator {
+    bool operator()(const std::pair<DifferentialForm, DifferentialForm>& a,
+                    const std::pair<DifferentialForm, DifferentialForm>& b) const {
+        Comparator cmp;
+        return cmp(a.first, b.first);
+    }
 };

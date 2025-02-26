@@ -2,6 +2,7 @@
 #include "Lie-Alg/DifferentialForm.h"
 #include "Lie-Alg/PairUtils.h"
 #include <iostream>
+#include <set>
 
 int main() {
     
@@ -35,8 +36,8 @@ int main() {
 
         omega.inverse();
 
-        outfile << "## Structure constants of the Lie Algebra:\n";
-        outfile << "$(";
+        outfile << "## Structure constants of the Lie Algebra:\n" << "$(";
+        
         for(int it = 0; it < 6; ++it){
             if (omega.algebra->dOf(it).checkZero())
                 outfile << 0;
@@ -52,23 +53,62 @@ int main() {
         else
             std::cout<<"The symplectic form is not closed!\n";
 
+        std::multiset<DifferentialForm, Comparator> kernel;
+        std::multiset<std::pair<DifferentialForm, DifferentialForm>, PairComparator> image;
+        std::pair<DifferentialForm, DifferentialForm> pairForm;
+
         outfile<<"### Derivatives of $3-$forms\n";
+
         for(const auto& form : basis_3forms){
             DifferentialForm alpha({form.i, form.j, form.k}, 1.0);
             DifferentialForm dalpha = alpha.exteriorDerivative();
 
-            if(!dalpha.checkZero())
-                outfile << "$d("<<alpha.toLaTeX() << ")  = " << dalpha.toLaTeX() << "$\n\n";         
+            if(!dalpha.checkZero()){
+                pairForm = std::make_pair(dalpha, alpha);   
+                image.insert(pairForm);
+            }
+            else{
+                kernel.insert(alpha);
+            }        
         }
 
+        for(const auto& result: image)
+            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+
+        outfile << "$Ker(d^3) \\supset \\{";
+        for(const auto& result : kernel)
+            outfile << result.toLaTeX() << ", \\ ";
+        outfile << "\\}$ \n\n";
+
+        image.clear();
+        kernel.clear();
+
         outfile<<"### Derivatives of $2-$forms\n";
+
         for(const auto& form : basis_2forms){
+
             DifferentialForm beta({form.i, form.j}, 1.0);
             DifferentialForm dbeta = beta.exteriorDerivative();
 
-            if(!dbeta.checkZero())
-                outfile << "$d("<<beta.toLaTeX() << ")  = " << dbeta.toLaTeX() << "$\n\n";
+            if(!dbeta.checkZero()){
+                pairForm = std::make_pair(dbeta, beta);   
+                image.insert(pairForm);
+            }
+            else{
+                kernel.insert(beta);
+            }
         }   
+
+        for(const auto& result: image)
+            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+
+        outfile << "$Ker(d^2) \\supset \\{";
+        for(const auto& result : kernel)
+            outfile << result.toLaTeX() << ", \\ ";
+        outfile << "\\}$ \n\n";
+
+        image.clear();
+        kernel.clear();
 
         outfile<<"### $d \\Lambda d$ of $3-$forms\n";
         for(const auto& form : basis_3forms){
@@ -77,9 +117,14 @@ int main() {
             DifferentialForm ldgamma = dgamma.interiorProduct(omega.inverse());
             DifferentialForm dldgamma = ldgamma.exteriorDerivative();
 
-            if(!dldgamma.checkZero())
-                outfile << "$d \\Lambda d( " << gamma.toLaTeX() << ")  = " << dldgamma.toLaTeX() << "$\n\n";  
+            if(!dldgamma.checkZero()){
+                pairForm = std::make_pair(dldgamma, gamma);   
+                image.insert(pairForm);
+            } 
         }
+
+        for(const auto& result: image)
+            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
                  
         outfile << "\\pagebreak\n\n";
     }
