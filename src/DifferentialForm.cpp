@@ -85,6 +85,7 @@ DifferentialForm DifferentialForm::wedge(const DifferentialForm& other) const {
 
     for (const auto& [indices1, coeff1] : this->terms) {
         for (auto& [indices2, coeff2] : other.terms) {
+            duplicate = false;
             combined = {0};
             count = {0};
 
@@ -100,7 +101,7 @@ DifferentialForm DifferentialForm::wedge(const DifferentialForm& other) const {
                 
                 if (count[combined[i] - 1] > 1){
                     duplicate = true;
-                    break;
+                    
                 }
             }
 

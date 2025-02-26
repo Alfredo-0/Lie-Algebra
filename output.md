@@ -39,6 +39,21 @@ $Ker(d^2) \supset \{e^{ 13 }, \ e^{ 14 }, \ e^{ 15 }, \ e^{ 16 }, \ e^{ 23 }, \ 
 ### $d \Lambda d$ of $3-$forms
 $d(e^{ 246 })  = (-1.5)e^{ 135 }$
 
+### Primitive elements
+$\omega \wedge e^{ 125 }= e^{ 12345 }; \ \omega \wedge e^{ 345 }= e^{ 12345 }; \ $
+
+$\omega \wedge e^{ 126 }= e^{ 12346 }; \ \omega \wedge e^{ 346 }= e^{ 12346 }; \ $
+
+$\omega \wedge e^{ 123 }= e^{ 12356 }; \ \omega \wedge e^{ 356 }= e^{ 12356 }; \ $
+
+$\omega \wedge e^{ 124 }= e^{ 12456 }; \ \omega \wedge e^{ 456 }= e^{ 12456 }; \ $
+
+$\omega \wedge e^{ 134 }= e^{ 13456 }; \ \omega \wedge e^{ 156 }= e^{ 13456 }; \ $
+
+$\omega \wedge e^{ 234 }= e^{ 23456 }; \ \omega \wedge e^{ 256 }= e^{ 23456 }; \ $
+
+$\omega \wedge e^{ 135 }=\omega \wedge e^{ 136 }=\omega \wedge e^{ 145 }=\omega \wedge e^{ 146 }=\omega \wedge e^{ 235 }=\omega \wedge e^{ 236 }=\omega \wedge e^{ 245 }=\omega \wedge e^{ 246 }=0.$ 
+
 \pagebreak
 
 ## Structure constants of the Lie Algebra:
@@ -82,6 +97,33 @@ $Ker(d^2) \supset \{e^{ 12 }, \ e^{ 13 }, \ e^{ 14 }, \ e^{ 15 }, \ e^{ 23 }, \ 
 ### $d \Lambda d$ of $3-$forms
 $d(e^{ 456 })  = (-3)e^{ 123 }$
 
+### Primitive elements
+$\omega \wedge e^{ 125 }= (-1)e^{ 12345 }; \ $
+
+$\omega \wedge e^{ 134 }= e^{ 12345 }; \ $
+
+$\omega \wedge e^{ 234 }= (-2)e^{ 12346 }; \ $
+
+$\omega \wedge e^{ 126 }= (-1)e^{ 12346 }; \ $
+
+$\omega \wedge e^{ 235 }= (-2)e^{ 12356 }; \ $
+
+$\omega \wedge e^{ 136 }= (-1)e^{ 12356 }; \ $
+
+$\omega \wedge e^{ 245 }= (-2)e^{ 12456 }; \ $
+
+$\omega \wedge e^{ 146 }= (-1)e^{ 12456 }; \ $
+
+$\omega \wedge e^{ 345 }= (-2)e^{ 13456 }; \ $
+
+$\omega \wedge e^{ 156 }= (-1)e^{ 13456 }; \ $
+
+$\omega \wedge e^{ 256 }= (-1)e^{ 23456 }; \ $
+
+$\omega \wedge e^{ 346 }= e^{ 23456 }; \ $
+
+$\omega \wedge e^{ 123 }=\omega \wedge e^{ 124 }=\omega \wedge e^{ 135 }=\omega \wedge e^{ 145 }=\omega \wedge e^{ 236 }=\omega \wedge e^{ 246 }=\omega \wedge e^{ 356 }=\omega \wedge e^{ 456 }=0.$ 
+
 \pagebreak
 
 ## Structure constants of the Lie Algebra:
@@ -119,6 +161,21 @@ $Ker(d^2) \supset \{e^{ 12 }, \ e^{ 13 }, \ e^{ 14 }, \ e^{ 15 }, \ e^{ 16 }, \ 
 ### $d \Lambda d$ of $3-$forms
 $d(e^{ 246 })  = (-2)e^{ 135 }$
 
+### Primitive elements
+$\omega \wedge e^{ 125 }= e^{ 12345 }; \ \omega \wedge e^{ 345 }= e^{ 12345 }; \ $
+
+$\omega \wedge e^{ 126 }= e^{ 12346 }; \ \omega \wedge e^{ 346 }= e^{ 12346 }; \ $
+
+$\omega \wedge e^{ 123 }= e^{ 12356 }; \ \omega \wedge e^{ 356 }= e^{ 12356 }; \ $
+
+$\omega \wedge e^{ 124 }= e^{ 12456 }; \ \omega \wedge e^{ 456 }= e^{ 12456 }; \ $
+
+$\omega \wedge e^{ 134 }= e^{ 13456 }; \ \omega \wedge e^{ 156 }= e^{ 13456 }; \ $
+
+$\omega \wedge e^{ 234 }= e^{ 23456 }; \ \omega \wedge e^{ 256 }= e^{ 23456 }; \ $
+
+$\omega \wedge e^{ 135 }=\omega \wedge e^{ 136 }=\omega \wedge e^{ 145 }=\omega \wedge e^{ 146 }=\omega \wedge e^{ 235 }=\omega \wedge e^{ 236 }=\omega \wedge e^{ 245 }=\omega \wedge e^{ 246 }=0.$ 
+
 \pagebreak
 
 ## Structure constants of the Lie Algebra:
@@ -155,6 +212,25 @@ $Ker(d^2) \supset \{e^{ 12 }, \ e^{ 13 }, \ e^{ 14 }, \ e^{ 15 }, \ e^{ 16 }, \ 
 
 ### $d \Lambda d$ of $3-$forms
 $d(e^{ 456 })  = (-2)e^{ 123 }$
+
+### Primitive elements
+$\omega \wedge e^{ 124 }= (-1)e^{ 12345 }; \ \omega \wedge e^{ 235 }= (-1)e^{ 12345 }; \ $
+
+$\omega \wedge e^{ 236 }= (-1)e^{ 12346 }; \ $
+
+$\omega \wedge e^{ 134 }= e^{ 12346 }; \ $
+
+$\omega \wedge e^{ 126 }= e^{ 12356 }; \ \omega \wedge e^{ 135 }= e^{ 12356 }; \ $
+
+$\omega \wedge e^{ 145 }= e^{ 12456 }; \ \omega \wedge e^{ 256 }= e^{ 12456 }; \ $
+
+$\omega \wedge e^{ 146 }= (-1)e^{ 13456 }; \ $
+
+$\omega \wedge e^{ 356 }= e^{ 13456 }; \ $
+
+$\omega \wedge e^{ 246 }= (-1)e^{ 23456 }; \ \omega \wedge e^{ 345 }= (-1)e^{ 23456 }; \ $
+
+$\omega \wedge e^{ 123 }=\omega \wedge e^{ 125 }=\omega \wedge e^{ 136 }=\omega \wedge e^{ 156 }=\omega \wedge e^{ 234 }=\omega \wedge e^{ 245 }=\omega \wedge e^{ 346 }=\omega \wedge e^{ 456 }=0.$ 
 
 \pagebreak
 
@@ -226,6 +302,21 @@ $d(e^{ 236 })  = 4e^{ 235 } + (-4)e^{ 236 }$
 $d(e^{ 245 })  = (-4)e^{ 245 } + (-4)e^{ 246 }$
 
 $d(e^{ 246 })  = 4e^{ 245 } + 4e^{ 246 }$
+
+### Primitive elements
+$\omega \wedge e^{ 125 }= e^{ 12345 }; \ \omega \wedge e^{ 345 }= e^{ 12345 }; \ $
+
+$\omega \wedge e^{ 126 }= e^{ 12346 }; \ \omega \wedge e^{ 346 }= e^{ 12346 }; \ $
+
+$\omega \wedge e^{ 123 }= e^{ 12356 }; \ \omega \wedge e^{ 356 }= e^{ 12356 }; \ $
+
+$\omega \wedge e^{ 124 }= e^{ 12456 }; \ \omega \wedge e^{ 456 }= e^{ 12456 }; \ $
+
+$\omega \wedge e^{ 134 }= e^{ 13456 }; \ \omega \wedge e^{ 156 }= e^{ 13456 }; \ $
+
+$\omega \wedge e^{ 234 }= e^{ 23456 }; \ \omega \wedge e^{ 256 }= e^{ 23456 }; \ $
+
+$\omega \wedge e^{ 135 }=\omega \wedge e^{ 136 }=\omega \wedge e^{ 145 }=\omega \wedge e^{ 146 }=\omega \wedge e^{ 235 }=\omega \wedge e^{ 236 }=\omega \wedge e^{ 245 }=\omega \wedge e^{ 246 }=0.$ 
 
 \pagebreak
 
