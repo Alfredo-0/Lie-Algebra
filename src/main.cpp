@@ -123,7 +123,7 @@ int main() {
         }
 
         for(const auto& result: image)
-            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$d \\Lambda d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
 
 
         image.clear();
