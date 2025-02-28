@@ -12,7 +12,7 @@ int main() {
         return 1;
     }
     
-    std::ofstream outfile("../../output.md");
+    std::ofstream outfile(DOCS_PATH);
     if (!outfile) {
         std::cerr << "Error: Could not open output.md for writing." << std::endl;
         return 1;
