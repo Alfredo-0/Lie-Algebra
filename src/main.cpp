@@ -6,9 +6,9 @@
 
 int main() {
     
-    std::ifstream file("../../res/input.txt");
+    std::ifstream file(RESOURCES_PATH);
     if (!file) {
-        std::cerr << "Error: Could not open input.txt for reading." << std::endl;
+        std::cerr << "Error: Could not open input.txt for reading." << std::endl << RESOURCES_PATH << std::endl;
         return 1;
     }
     
