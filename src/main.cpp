@@ -7,12 +7,8 @@
 
 int main() {
 
-    GiNaC::symbol x("x");
-    GiNaC::ex expr = GiNaC::pow(x,2) + 2*x + 1;
+    GiNaC::symbol x("x", "\\lambda");
 
-    std::cout << "Expression: " << expr << std::endl;
-    std::cout << "Expanded: " << GiNaC::expand(expr) << std::endl;
-    
     std::ifstream file(RESOURCES_PATH);
     if (!file) {
         std::cerr << "Error: Could not open input.txt for reading." << std::endl << RESOURCES_PATH << std::endl;
@@ -32,7 +28,7 @@ int main() {
             continue;
         std::getline(file, line2);
         
-        PairLists lists = readPairLists(line1, line2);
+        PairLists lists = readPairLists(line1, line2, x);
 
         DifferentialForm::algebra = std::make_shared<LieAlgebra>(lists.list1);
         DifferentialForm omega(2);
@@ -89,7 +85,7 @@ int main() {
 
         image.clear();
         kernel.clear();
-
+        
         outfile<<"### Derivatives of $2-$forms\n";
 
         for(const auto& form : basis_2forms){
@@ -174,6 +170,7 @@ int main() {
         
                  
         outfile << "\\pagebreak\n\n";
+
     }
 
     outfile.close();
