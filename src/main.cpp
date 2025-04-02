@@ -1,10 +1,17 @@
 //main.cpp
 #include "Lie-Alg/DifferentialForm.h"
 #include "Lie-Alg/PairUtils.h"
+#include <ginac/ginac.h>
 #include <iostream>
 #include <set>
 
 int main() {
+
+    GiNaC::symbol x("x");
+    GiNaC::ex expr = GiNaC::pow(x,2) + 2*x + 1;
+
+    std::cout << "Expression: " << expr << std::endl;
+    std::cout << "Expanded: " << GiNaC::expand(expr) << std::endl;
     
     std::ifstream file(RESOURCES_PATH);
     if (!file) {
