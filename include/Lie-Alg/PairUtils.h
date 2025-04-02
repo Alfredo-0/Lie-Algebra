@@ -1,6 +1,8 @@
 #ifndef PAIRUTILS_H
 #define PAIRUTILS_H
 
+#include <ginac/ginac.h>
+
 #include <vector>
 #include <string>
 #include <sstream>
@@ -10,7 +12,7 @@
 
 struct Pair {
     int left;
-    double right;
+    GiNaC::ex right; //
 };
 
 struct PairLists {
@@ -29,7 +31,7 @@ inline std::string trim(const std::string &s) {
     return std::string(start, end + 1);
 }
 
-inline std::vector<std::vector<Pair>> parseLine(const std::string &line) {
+inline std::vector<std::vector<Pair>> parseLine(const std::string &line, const GiNaC::ex &x) {
     std::vector<std::vector<Pair>> result;
     std::string cleaned;
     
@@ -49,10 +51,14 @@ inline std::vector<std::vector<Pair>> parseLine(const std::string &line) {
         std::istringstream tokenStream(token);
         std::vector<Pair> pairs;
         int left;
-        double right;
+        std::string right; //
 
         while (tokenStream >> left >> right) {
-            pairs.push_back({left, right});
+            GiNaC::symtab table;
+            table["x"] = x;
+            GiNaC::parser reader(table);
+            GiNaC::ex right_expr = reader(right);
+            pairs.push_back({left, right_expr});
         }
         result.push_back(pairs);
     }
@@ -60,10 +66,11 @@ inline std::vector<std::vector<Pair>> parseLine(const std::string &line) {
     return result;
 }
 
-inline PairLists readPairLists(const std::string &line1, const std::string &line2) {
+inline PairLists readPairLists(const std::string &line1, const std::string &line2, const GiNaC::ex &x) {
     PairLists result;
-    result.list1 = parseLine(line1);
-    result.list2 = parseLine(line2);
+
+    result.list1 = parseLine(line1, x);
+    result.list2 = parseLine(line2, x);
     return result;
 }
 

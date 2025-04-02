@@ -49,7 +49,7 @@ bool DifferentialForm::checkZero() const{
     return check;
 }
 
-void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, GiNaC::ex coeff) {
+void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, const GiNaC::ex & coeff) {
     if (!degree_assigned) {
         int computed_degree = 0;
         for (int idx : indices){
@@ -60,7 +60,7 @@ void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, GiNaC:
         degree_assigned = true;
     }
     
-    GiNaC::ex sign = 1.0;
+    double sign = 1.0;
     
     std::array<int, DIMENSION> sortedIndices = indices;
     std::sort(sortedIndices.begin(), sortedIndices.end(), comp);
@@ -71,8 +71,11 @@ void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, GiNaC:
                 sign = -sign;
         }
     }
-    terms[sortedIndices] += (sign)*coeff;
-    if(terms[sortedIndices] == 0)
+
+    GiNaC::ex& current_expr = terms[sortedIndices];
+    current_expr += (sign)*coeff;
+
+    if (GiNaC::is_zero(current_expr))
         terms.erase(sortedIndices);
 }
 
@@ -138,7 +141,7 @@ DifferentialForm DifferentialForm::exteriorDerivative() const {
                 }
             }
             
-            GiNaC::ex sign = ((j + 1) % 2 == 0) ? -1.0 : 1.0;
+            double sign = ((j + 1) % 2 == 0) ? -1.0 : 1.0;
             
             DifferentialForm remainingForm(remaining, sign*coeff);
             
@@ -153,8 +156,8 @@ DifferentialForm DifferentialForm::interiorProduct(const DifferentialForm& other
     DifferentialForm result;
     
     std::array<int, DIMENSION> remaining = {};
-    GiNaC::ex sign = 1.0;
-    GiNaC::ex aux = 0.0;
+    double sign = 1.0;
+    double aux = 0.0;
 
     for (const auto& [indices, coeff] : this->terms) { 
         for (const auto& [indices2, coeff2] : other.terms) {
@@ -201,15 +204,15 @@ std::string DifferentialForm::toLaTeX() const {
     std::stringstream ss;
     std::string index = " ";
     bool firstTerm = true;
-
+    ss << GiNaC::latex;
     for (auto& [indices, coeff]: terms){
         if(!firstTerm)
             ss<<" + ";
 
-        if(coeff<0)
+        if(coeff<0 || coeff.nops()>1)
             ss << '(' << coeff << ')';
         else if (coeff != 1)
-            ss << coeff;
+            ss << coeff << " \\ ";
 
         if(!indices.empty()){
             index = " ";
@@ -226,7 +229,7 @@ std::string DifferentialForm::toLaTeX() const {
     return ss.str();
 }
 
-LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
+LieAlgebra::LieAlgebra(const std::vector<std::vector<Pair>>& str) {
     std::cout << "Lie Algebra constructed.\n";
     
     for (int i = 0; i < 6; ++i) {
@@ -236,7 +239,7 @@ LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
     
     for(int it = 0; it < str.size(); it++){
         for(const auto& terms: str[it]){
-            if(terms.left != 0){
+            if(terms.left != 0){ 
                 structureConstants[it].addTerm({terms.left/10, terms.left%10}, terms.right);
             }
         }

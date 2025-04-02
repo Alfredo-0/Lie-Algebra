@@ -48,12 +48,12 @@ class DifferentialForm {
     int degree;
     bool degree_assigned;
     
-    public:
+public:
     inline static std::shared_ptr<LieAlgebra> algebra = nullptr;
 
     DifferentialForm(int d) : degree(d), degree_assigned(true) { }
     
-    DifferentialForm(const std::array<int, DIMENSION>& indices, GiNaC::ex coeff)
+    DifferentialForm(const std::array<int, DIMENSION>& indices, const GiNaC::ex & coeff)
     : degree(0), degree_assigned(false) {
         addTerm(indices, coeff);
     }
@@ -62,7 +62,7 @@ class DifferentialForm {
 
     ~DifferentialForm() {}
 
-    void addTerm(const std::array<int, DIMENSION>& indices, GiNaC::ex coeff);
+    void addTerm(const std::array<int, DIMENSION>& indices, const GiNaC::ex & coeff);
     
     friend struct Comparator;
     
@@ -87,7 +87,7 @@ class LieAlgebra {
     std::array<DifferentialForm, DIMENSION> structureConstants;
 
 public:
-    LieAlgebra(std::vector<std::vector<Pair>> str);
+    LieAlgebra(const std::vector<std::vector<Pair>> &str);
 
     DifferentialForm dOf(int i) const {
         return structureConstants[i];
