@@ -1,4 +1,5 @@
 //DifferentialForm.h
+#include <ginac/ginac.h>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -10,7 +11,7 @@
 
 #include "Lie-Alg/PairUtils.h"
 
-const int DIMENSION = 12;
+const int DIMENSION = 2*6+1;
 
 struct Triple{
     int i;
