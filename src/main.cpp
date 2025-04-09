@@ -131,43 +131,6 @@ int main() {
 
         image.clear();
         kernel.clear();
-
-        outfile << "### Primitive elements\n";
-        
-        for(const auto& form : basis_3forms){
-            DifferentialForm alpha({form.i, form.j, form.k}, 1.0);
-            DifferentialForm walpha = omega.wedge(alpha);
-
-            if(!walpha.checkZero()){
-                pairForm = std::make_pair(walpha, alpha);   
-                image.insert(pairForm);
-            }
-            else{
-                kernel.insert(alpha);
-            }        
-        }
-
-        auto it = image.begin();
-        Comparator cmp;
-
-        while (it != image.end()) {
-            auto representative = *it;
-            outfile <<"$\\omega \\wedge " << representative.second.toLaTeX() << "= " << representative.first.toLaTeX() << "; \\ ";
-            ++it;
-
-            while (it != image.end() && !cmp(representative.first,  (*it).first) && !cmp((*it).first, representative.first)) {
-                auto aux = *it;
-                outfile << "\\omega \\wedge " << (*it).second.toLaTeX() << "= " << (*it).first.toLaTeX() << "; \\ ";;
-                ++it;
-            }
-            outfile << "$\n\n";
-        }
-
-        outfile << "$";
-        for(const auto& result : kernel)
-            outfile <<"\\omega \\wedge "<< result.toLaTeX() << "=";
-        outfile << "0.$ \n\n";
-        
                  
         outfile << "\\pagebreak\n\n";
 
