@@ -422,7 +422,7 @@ $d(e^{ 56 })  = (1.0-\lambda)e^{ 135 }$
 $Ker(d^2) \supset \{e^{ 13 }, \ e^{ 14 }, \ e^{ 15 }, \ e^{ 16 }, \ e^{ 23 }, \ e^{ 25 }, \ e^{ 35 }, \ e^{ 36 }, \ e^{ 45 }, \ \}$ 
 
 ### $d \Lambda d$ of $3-$forms
-$d \Lambda d(e^{ 246 })  = (-1.0+ {(1.0-\lambda)} {(-1+\lambda)}-\lambda^{2})e^{ 135 }$
+$d \Lambda d(e^{ 246 })  = (-1.0-\lambda^{2}+ {(1.0-\lambda)} {(-1+\lambda)})e^{ 135 }$
 
 \pagebreak
 
@@ -469,7 +469,7 @@ $d(e^{ 46 })  = ({(2.0)} \frac{\lambda}{{1+\lambda^{2}}})e^{ 156 } + (\frac{1}{{
 $Ker(d^2) \supset \{e^{ 13 }, \ e^{ 14 }, \ e^{ 15 }, \ e^{ 23 }, \ e^{ 35 }, \ e^{ 36 }, \ e^{ 45 }, \ e^{ 56 }, \ \}$ 
 
 ### $d \Lambda d$ of $3-$forms
-$d \Lambda d(e^{ 246 })  = (2 \frac{1}{{1+\lambda^{2}}}-{(8.0)} \frac{\lambda^{2}}{{1+\lambda^{2}}^{2}})e^{ 135 }$
+$d \Lambda d(e^{ 246 })  = (-{(8.0)} \frac{\lambda^{2}}{{1+\lambda^{2}}^{2}}+2 \frac{1}{{1+\lambda^{2}}})e^{ 135 }$
 
 \pagebreak
 
