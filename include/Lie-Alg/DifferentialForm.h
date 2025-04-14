@@ -13,11 +13,7 @@
 
 const int DIMENSION = 2*6+1;
 
-struct Triple{
-    int i;
-    int j;
-    int k;
-};
+using Triple = std::array<int, 3>;
 
 struct Pairs{
     int i;
@@ -89,6 +85,8 @@ public:
     DifferentialForm inverse() const;
     
     void print() const;
+
+    std::string getLetters() const;
 };
 
 class LieAlgebra {

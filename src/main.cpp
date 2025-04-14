@@ -5,7 +5,11 @@
 #include <iostream>
 #include <set>
 
+
 int main() {
+
+    //Triple example = {1,2,5};
+    //std::cout << getStringFromTuple(example) << std::endl;
 
     GiNaC::symbol x("x", "\\lambda");
 
@@ -63,7 +67,7 @@ int main() {
         outfile<<"### Derivatives of $3-$forms\n";
 
         for(const auto& form : basis_3forms){
-            DifferentialForm alpha({form.i, form.j, form.k}, 1.0);
+            DifferentialForm alpha({form[0], form[1], form[2]}, 1.0);
             DifferentialForm dalpha = alpha.exteriorDerivative();
 
             if(!dalpha.checkZero()){
@@ -76,7 +80,7 @@ int main() {
         }
 
         for(const auto& result: image)
-            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$" << result.second.getLetters() <<", \\ \\"<< "d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
 
         outfile << "$Ker(d^3) \\supset \\{";
         for(const auto& result : kernel)
@@ -102,7 +106,7 @@ int main() {
         }   
 
         for(const auto& result: image)
-            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << ", \\ \\ " << result.first.getLetters() << "$\n\n";
 
         outfile << "$Ker(d^2) \\supset \\{";
         for(const auto& result : kernel)
@@ -114,7 +118,7 @@ int main() {
 
         outfile<<"### $d \\Lambda d$ of $3-$forms\n";
         for(const auto& form : basis_3forms){
-            DifferentialForm gamma({form.i, form.j, form.k}, 1.0);
+            DifferentialForm gamma({form[0], form[1], form[2]}, 1.0);
             DifferentialForm dgamma = gamma.exteriorDerivative();
             DifferentialForm ldgamma = dgamma.interiorProduct(omega.inverse());
             DifferentialForm dldgamma = ldgamma.exteriorDerivative();
