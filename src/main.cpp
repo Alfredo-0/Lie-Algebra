@@ -7,12 +7,8 @@
 
 int main() {
 
-    GiNaC::symbol x("x");
-    GiNaC::ex expr = GiNaC::pow(x,2) + 2*x + 1;
+    GiNaC::symbol x("x", "\\lambda");
 
-    std::cout << "Expression: " << expr << std::endl;
-    std::cout << "Expanded: " << GiNaC::expand(expr) << std::endl;
-    
     std::ifstream file(RESOURCES_PATH);
     if (!file) {
         std::cerr << "Error: Could not open input.txt for reading." << std::endl << RESOURCES_PATH << std::endl;
@@ -32,7 +28,7 @@ int main() {
             continue;
         std::getline(file, line2);
         
-        PairLists lists = readPairLists(line1, line2);
+        PairLists lists = readPairLists(line1, line2, x);
 
         DifferentialForm::algebra = std::make_shared<LieAlgebra>(lists.list1);
         DifferentialForm omega(2);
@@ -89,7 +85,7 @@ int main() {
 
         image.clear();
         kernel.clear();
-
+        
         outfile<<"### Derivatives of $2-$forms\n";
 
         for(const auto& form : basis_2forms){
@@ -135,45 +131,9 @@ int main() {
 
         image.clear();
         kernel.clear();
-
-        outfile << "### Primitive elements\n";
-        
-        for(const auto& form : basis_3forms){
-            DifferentialForm alpha({form.i, form.j, form.k}, 1.0);
-            DifferentialForm walpha = omega.wedge(alpha);
-
-            if(!walpha.checkZero()){
-                pairForm = std::make_pair(walpha, alpha);   
-                image.insert(pairForm);
-            }
-            else{
-                kernel.insert(alpha);
-            }        
-        }
-
-        auto it = image.begin();
-        Comparator cmp;
-
-        while (it != image.end()) {
-            auto representative = *it;
-            outfile <<"$\\omega \\wedge " << representative.second.toLaTeX() << "= " << representative.first.toLaTeX() << "; \\ ";
-            ++it;
-
-            while (it != image.end() && !cmp(representative.first,  (*it).first) && !cmp((*it).first, representative.first)) {
-                auto aux = *it;
-                outfile << "\\omega \\wedge " << (*it).second.toLaTeX() << "= " << (*it).first.toLaTeX() << "; \\ ";;
-                ++it;
-            }
-            outfile << "$\n\n";
-        }
-
-        outfile << "$";
-        for(const auto& result : kernel)
-            outfile <<"\\omega \\wedge "<< result.toLaTeX() << "=";
-        outfile << "0.$ \n\n";
-        
                  
         outfile << "\\pagebreak\n\n";
+
     }
 
     outfile.close();
