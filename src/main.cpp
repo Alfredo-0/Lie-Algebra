@@ -5,14 +5,14 @@
 #include <iostream>
 #include <set>
 
+
 int main() {
 
-    GiNaC::symbol x("x");
-    GiNaC::ex expr = GiNaC::pow(x,2) + 2*x + 1;
+    //Triple example = {1,2,5};
+    //std::cout << getStringFromTuple(example) << std::endl;
 
-    std::cout << "Expression: " << expr << std::endl;
-    std::cout << "Expanded: " << GiNaC::expand(expr) << std::endl;
-    
+    GiNaC::symbol x("x", "\\lambda");
+
     std::ifstream file(RESOURCES_PATH);
     if (!file) {
         std::cerr << "Error: Could not open input.txt for reading." << std::endl << RESOURCES_PATH << std::endl;
@@ -32,7 +32,7 @@ int main() {
             continue;
         std::getline(file, line2);
         
-        PairLists lists = readPairLists(line1, line2);
+        PairLists lists = readPairLists(line1, line2, x);
 
         DifferentialForm::algebra = std::make_shared<LieAlgebra>(lists.list1);
         DifferentialForm omega(2);
@@ -67,7 +67,7 @@ int main() {
         outfile<<"### Derivatives of $3-$forms\n";
 
         for(const auto& form : basis_3forms){
-            DifferentialForm alpha({form.i, form.j, form.k}, 1.0);
+            DifferentialForm alpha({form[0], form[1], form[2]}, 1.0);
             DifferentialForm dalpha = alpha.exteriorDerivative();
 
             if(!dalpha.checkZero()){
@@ -80,7 +80,7 @@ int main() {
         }
 
         for(const auto& result: image)
-            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$" << result.second.getLetters() <<", \\ \\ d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
 
         outfile << "$Ker(d^3) \\supset \\{";
         for(const auto& result : kernel)
@@ -89,7 +89,7 @@ int main() {
 
         image.clear();
         kernel.clear();
-
+        
         outfile<<"### Derivatives of $2-$forms\n";
 
         for(const auto& form : basis_2forms){
@@ -106,7 +106,7 @@ int main() {
         }   
 
         for(const auto& result: image)
-            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << ", \\ \\ " << result.first.getLetters() << "$\n\n";
 
         outfile << "$Ker(d^2) \\supset \\{";
         for(const auto& result : kernel)
@@ -118,7 +118,7 @@ int main() {
 
         outfile<<"### $d \\Lambda d$ of $3-$forms\n";
         for(const auto& form : basis_3forms){
-            DifferentialForm gamma({form.i, form.j, form.k}, 1.0);
+            DifferentialForm gamma({form[0], form[1], form[2]}, 1.0);
             DifferentialForm dgamma = gamma.exteriorDerivative();
             DifferentialForm ldgamma = dgamma.interiorProduct(omega.inverse());
             DifferentialForm dldgamma = ldgamma.exteriorDerivative();
@@ -130,50 +130,14 @@ int main() {
         }
 
         for(const auto& result: image)
-            outfile << "$d \\Lambda d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$" << result.second.getLetters() << ", \\ \\ d \\Lambda d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "\\ \\ " << result.first.getLetters() <<"$\n\n";
 
 
         image.clear();
         kernel.clear();
-
-        outfile << "### Primitive elements\n";
-        
-        for(const auto& form : basis_3forms){
-            DifferentialForm alpha({form.i, form.j, form.k}, 1.0);
-            DifferentialForm walpha = omega.wedge(alpha);
-
-            if(!walpha.checkZero()){
-                pairForm = std::make_pair(walpha, alpha);   
-                image.insert(pairForm);
-            }
-            else{
-                kernel.insert(alpha);
-            }        
-        }
-
-        auto it = image.begin();
-        Comparator cmp;
-
-        while (it != image.end()) {
-            auto representative = *it;
-            outfile <<"$\\omega \\wedge " << representative.second.toLaTeX() << "= " << representative.first.toLaTeX() << "; \\ ";
-            ++it;
-
-            while (it != image.end() && !cmp(representative.first,  (*it).first) && !cmp((*it).first, representative.first)) {
-                auto aux = *it;
-                outfile << "\\omega \\wedge " << (*it).second.toLaTeX() << "= " << (*it).first.toLaTeX() << "; \\ ";;
-                ++it;
-            }
-            outfile << "$\n\n";
-        }
-
-        outfile << "$";
-        for(const auto& result : kernel)
-            outfile <<"\\omega \\wedge "<< result.toLaTeX() << "=";
-        outfile << "0.$ \n\n";
-        
                  
         outfile << "\\pagebreak\n\n";
+
     }
 
     outfile.close();
