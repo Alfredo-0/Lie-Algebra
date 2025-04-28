@@ -80,7 +80,7 @@ int main() {
         }
 
         for(const auto& result: image)
-            outfile << "$" << result.second.getLetters() <<", \\ \\"<< "d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$" << result.second.getLetters() <<", \\ \\ d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
 
         outfile << "$Ker(d^3) \\supset \\{";
         for(const auto& result : kernel)
@@ -130,7 +130,7 @@ int main() {
         }
 
         for(const auto& result: image)
-            outfile << "$d \\Lambda d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            outfile << "$" << result.second.getLetters() << ", \\ \\ d \\Lambda d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "\\ \\ " << result.first.getLetters() <<"$\n\n";
 
 
         image.clear();

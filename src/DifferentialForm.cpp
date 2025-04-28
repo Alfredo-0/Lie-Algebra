@@ -245,7 +245,7 @@ std::string DifferentialForm::toLaTeX() const {
 }
 
 std::string DifferentialForm::getLetters() const {
-    std::string res = " ";
+    std::string res = "";
 
     //if(degree != 3)
     //    return res;
