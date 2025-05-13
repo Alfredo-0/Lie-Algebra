@@ -1,6 +1,21 @@
 //DifferentialForm.cpp
 #include "Lie-Alg/DifferentialForm.h"
 
+
+std::string getStringFromTuple(Triple input) {
+
+    std::sort(input.begin(), input.end());
+
+    auto it = std::find(basis_3forms.begin(), basis_3forms.end(), input);
+
+    if (it != basis_3forms.end()) {
+        size_t index = std::distance(basis_3forms.begin(), it);
+        return basis_3constants[index];
+    }
+
+    throw std::invalid_argument("Tuple not found");
+}
+
 bool comp(int i, int j){
     if(i == 0 && j != 0)
         return false;
@@ -49,7 +64,7 @@ bool DifferentialForm::checkZero() const{
     return check;
 }
 
-void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, double coeff) {
+void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, const GiNaC::ex & coeff) {
     if (!degree_assigned) {
         int computed_degree = 0;
         for (int idx : indices){
@@ -71,8 +86,11 @@ void DifferentialForm::addTerm(const std::array<int, DIMENSION>& indices, double
                 sign = -sign;
         }
     }
-    terms[sortedIndices] += (sign)*coeff;
-    if(terms[sortedIndices] == 0)
+
+    GiNaC::ex& current_expr = terms[sortedIndices];
+    current_expr += (sign)*coeff;
+
+    if (GiNaC::is_zero(current_expr))
         terms.erase(sortedIndices);
 }
 
@@ -201,15 +219,15 @@ std::string DifferentialForm::toLaTeX() const {
     std::stringstream ss;
     std::string index = " ";
     bool firstTerm = true;
-
+    ss << GiNaC::latex;
     for (auto& [indices, coeff]: terms){
         if(!firstTerm)
             ss<<" + ";
 
-        if(coeff<0)
+        if(coeff<0 || coeff.nops()>1)
             ss << '(' << coeff << ')';
         else if (coeff != 1)
-            ss << coeff;
+            ss << coeff << " \\ ";
 
         if(!indices.empty()){
             index = " ";
@@ -226,7 +244,22 @@ std::string DifferentialForm::toLaTeX() const {
     return ss.str();
 }
 
-LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
+std::string DifferentialForm::getLetters() const {
+    std::string res = "";
+
+    //if(degree != 3)
+    //    return res;
+
+    
+    for (auto& [indices, coeff]: terms){
+        res += getStringFromTuple({indices[0], indices[1], indices[2]});
+        // std::cout << indices[0] << indices[1] << indices[2] << std::endl;
+    }
+
+    return res;
+}
+
+LieAlgebra::LieAlgebra(const std::vector<std::vector<Pair>>& str) {
     std::cout << "Lie Algebra constructed.\n";
     
     for (int i = 0; i < 6; ++i) {
@@ -236,7 +269,7 @@ LieAlgebra::LieAlgebra(std::vector<std::vector<Pair>> str) {
     
     for(int it = 0; it < str.size(); it++){
         for(const auto& terms: str[it]){
-            if(terms.left != 0){
+            if(terms.left != 0){ 
                 structureConstants[it].addTerm({terms.left/10, terms.left%10}, terms.right);
             }
         }

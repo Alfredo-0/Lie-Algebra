@@ -13,11 +13,7 @@
 
 const int DIMENSION = 2*6+1;
 
-struct Triple{
-    int i;
-    int j;
-    int k;
-};
+using Triple = std::array<int, 3>;
 
 struct Pairs{
     int i;
@@ -32,6 +28,14 @@ const std::array<Triple, 20> basis_3forms = {{
     {3,4,5}, {3,4,6}, {3,5,6}, {4,5,6}
 }};
 
+const std::array<std::string, 20> basis_3constants = {{
+    "(K+Q)/2", "(L+R)/2", "(M+S)/2", "(N+T)/2",
+    "(I+O)/2", "A", "B", "C",
+    "D", "(O-I)/2", "(J+P)/2", "E",
+    "F", "G", "H", "(P-J)/2",
+    "(S-M)/2", "(T-N)/2", "(Q-K)/2", "(R-L)/2"
+}};
+
 const std::array<Pairs, 15> basis_2forms = {{
     {1,2}, {1,3}, {1,4}, {1,5}, {1,6},
     {2,3}, {2,4}, {2,5}, {2,6}, {3,4},
@@ -44,16 +48,16 @@ struct PairComparator;
 class LieAlgebra;
 
 class DifferentialForm {
-    std::map<std::array<int, DIMENSION>, double> terms;
+    std::map<std::array<int, DIMENSION>, GiNaC::ex> terms;
     int degree;
     bool degree_assigned;
     
-    public:
+public:
     inline static std::shared_ptr<LieAlgebra> algebra = nullptr;
 
     DifferentialForm(int d) : degree(d), degree_assigned(true) { }
     
-    DifferentialForm(const std::array<int, DIMENSION>& indices, double coeff)
+    DifferentialForm(const std::array<int, DIMENSION>& indices, const GiNaC::ex & coeff)
     : degree(0), degree_assigned(false) {
         addTerm(indices, coeff);
     }
@@ -62,7 +66,7 @@ class DifferentialForm {
 
     ~DifferentialForm() {}
 
-    void addTerm(const std::array<int, DIMENSION>& indices, double coeff);
+    void addTerm(const std::array<int, DIMENSION>& indices, const GiNaC::ex & coeff);
     
     friend struct Comparator;
     
@@ -81,13 +85,15 @@ class DifferentialForm {
     DifferentialForm inverse() const;
     
     void print() const;
+
+    std::string getLetters() const;
 };
 
 class LieAlgebra {
     std::array<DifferentialForm, DIMENSION> structureConstants;
 
 public:
-    LieAlgebra(std::vector<std::vector<Pair>> str);
+    LieAlgebra(const std::vector<std::vector<Pair>> &str);
 
     DifferentialForm dOf(int i) const {
         return structureConstants[i];
