@@ -8,9 +8,6 @@
 
 int main() {
 
-    //Triple example = {1,2,5};
-    //std::cout << getStringFromTuple(example) << std::endl;
-
     GiNaC::symbol x("x", "\\lambda");
 
     std::ifstream file(RESOURCES_PATH);
@@ -25,11 +22,14 @@ int main() {
         return 1;
     }
     
-    std::string line1, line2;
+    std::string enumeration, line1, line2;
  
-    while(std::getline(file, line1)){
-        if(line1.length() == 0)
+    while(std::getline(file, enumeration, ' ')){
+        if(enumeration.length() == 0)
             continue;
+        
+        
+        std::getline(file, line1);
         std::getline(file, line2);
         
         PairLists lists = readPairLists(line1, line2, x);
@@ -43,7 +43,7 @@ int main() {
 
         omega.inverse();
 
-        outfile << "## Structure constants of the Lie Algebra:\n" << "$(";
+        outfile << "## " << enumeration << " Structure constants of the Lie Algebra:\n" << "$(";
         
         for(int it = 0; it < 6; ++it){
             if (omega.algebra->dOf(it).checkZero())
@@ -63,58 +63,6 @@ int main() {
         std::multiset<DifferentialForm, Comparator> kernel;
         std::multiset<std::pair<DifferentialForm, DifferentialForm>, PairComparator> image;
         std::pair<DifferentialForm, DifferentialForm> pairForm;
-
-        outfile<<"### Derivatives of $3-$forms\n";
-
-        for(const auto& form : basis_3forms){
-            DifferentialForm alpha({form[0], form[1], form[2]}, 1.0);
-            DifferentialForm dalpha = alpha.exteriorDerivative();
-
-            if(!dalpha.checkZero()){
-                pairForm = std::make_pair(dalpha, alpha);   
-                image.insert(pairForm);
-            }
-            else{
-                kernel.insert(alpha);
-            }        
-        }
-
-        for(const auto& result: image)
-            outfile << "$" << result.second.getLetters() <<", \\ \\ d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
-
-        outfile << "$Ker(d^3) \\supset \\{";
-        for(const auto& result : kernel)
-            outfile << result.toLaTeX() << ", \\ ";
-        outfile << "\\}$ \n\n";
-
-        image.clear();
-        kernel.clear();
-        
-        outfile<<"### Derivatives of $2-$forms\n";
-
-        for(const auto& form : basis_2forms){
-            DifferentialForm beta({form.i, form.j}, 1.0);
-            DifferentialForm dbeta = beta.exteriorDerivative();
-
-            if(!dbeta.checkZero()){
-                pairForm = std::make_pair(dbeta, beta);   
-                image.insert(pairForm);
-            }
-            else{
-                kernel.insert(beta);
-            }
-        }   
-
-        for(const auto& result: image)
-            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << ", \\ \\ " << result.first.getLetters() << "$\n\n";
-
-        outfile << "$Ker(d^2) \\supset \\{";
-        for(const auto& result : kernel)
-            outfile << result.toLaTeX() << ", \\ ";
-        outfile << "\\}$ \n\n";
-
-        image.clear();
-        kernel.clear();
 
         outfile<<"### $d \\Lambda d$ of $3-$forms\n";
         for(const auto& form : basis_3forms){
@@ -136,7 +84,7 @@ int main() {
         image.clear();
         kernel.clear();
                  
-        outfile << "\\pagebreak\n\n";
+        //outfile << "\\pagebreak\n\n";
 
     }
 
