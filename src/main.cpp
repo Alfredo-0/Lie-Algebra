@@ -8,9 +8,6 @@
 
 int main() {
 
-    //Triple example = {1,2,5};
-    //std::cout << getStringFromTuple(example) << std::endl;
-
     GiNaC::symbol x("x", "\\lambda");
 
     std::ifstream file(RESOURCES_PATH);
@@ -25,11 +22,14 @@ int main() {
         return 1;
     }
     
-    std::string line1, line2;
+    std::string enumeration, line1, line2;
  
-    while(std::getline(file, line1)){
-        if(line1.length() == 0)
+    while(std::getline(file, enumeration, ' ')){
+        if(enumeration.length() == 0)
             continue;
+        
+        
+        std::getline(file, line1);
         std::getline(file, line2);
         
         PairLists lists = readPairLists(line1, line2, x);
@@ -43,7 +43,7 @@ int main() {
 
         omega.inverse();
 
-        outfile << "## Structure constants of the Lie Algebra:\n" << "$(";
+        outfile << "## " << enumeration << " Structure constants of the Lie Algebra:\n" << "$(";
         
         for(int it = 0; it < 6; ++it){
             if (omega.algebra->dOf(it).checkZero())
@@ -84,7 +84,7 @@ int main() {
         image.clear();
         kernel.clear();
                  
-        outfile << "\\pagebreak\n\n";
+        //outfile << "\\pagebreak\n\n";
 
     }
 
