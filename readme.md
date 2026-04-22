@@ -4,7 +4,7 @@ The following description can be more detailed in [docs/F-Harmonic-3-forms.pdf]
 
 ## Introduction 
 
-Let $(M, /omega)$ be a 6-dimensional symplectic Lie group, let $/frak(g)$ its lie algebra, we will compute its Lie algebra cohomology and symplectic cohomology analogues. In general, for a 6-dimensional symplectic manifold, from any 3-form $/phi$ on M, or better any $/phi /in /bigwedge^3 g^*$, one can construct an endomorphism $K(/phi)$ of TM, another 3-form $F(/phi)$ and a scalar function $Q(/phi)$. The endomorphisms $F,K,Q$ are homogeneous polynomials in $/phi$ of degree 2, 3 and 4, respectively.
+Let $`(M, /omega)`$ be a 6-dimensional symplectic Lie group, let $/frak(g)$ its lie algebra, we will compute its Lie algebra cohomology and symplectic cohomology analogues. In general, for a 6-dimensional symplectic manifold, from any 3-form $/phi$ on M, or better any $/phi /in /bigwedge^3 g^*$, one can construct an endomorphism $K(/phi)$ of TM, another 3-form $F(/phi)$ and a scalar function $Q(/phi)$. The endomorphisms $F,K,Q$ are homogeneous polynomials in $/phi$ of degree 2, 3 and 4, respectively.
 
 We say $/phi$ is $F$ harmonic if $d/phi=0$ and $dF(/phi)= 0$. We want to characterize the set of $F$ harmonic 3-forms. Also, we want to consider the following evolution equation of 3-forms $/del_t /phi = d/Lambda_/omega d F(/phi)$, where $/Lambda_/omega$ is the Lefschetz operator of contraction with respect to the symplectic form $/omega$. We want to verify the short-time existence and uniqueness.
 
