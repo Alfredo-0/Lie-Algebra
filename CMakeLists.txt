@@ -22,7 +22,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${GINAC_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${GINAC_LIBRARIES})
 target_compile_options(${PROJECT_NAME} PRIVATE ${GINAC_CFLAGS_OTHER})
 
+# Enable testing
 if(EXISTS "${PROJECT_SOURCE_DIR}/test/CMakeLists.txt")
     enable_testing()
     add_subdirectory(test)
+else()
+    message(WARNING "test/CMakeLists.txt not found - tests will not be built")
 endif()
