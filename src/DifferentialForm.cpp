@@ -3,7 +3,6 @@
 
 
 std::string getStringFromTuple(Triple input) {
-
     std::sort(input.begin(), input.end());
 
     auto it = std::find(basis_3forms.begin(), basis_3forms.end(), input);
@@ -245,18 +244,20 @@ std::string DifferentialForm::toLaTeX() const {
 }
 
 std::string DifferentialForm::getLetters() const {
-    std::string res = "";
+    std::stringstream ss;
 
-    //if(degree != 3)
-    //    return res;
+    size_t counter = 0;
 
-    
+    ss << GiNaC::latex;
     for (auto& [indices, coeff]: terms){
-        res += getStringFromTuple({indices[0], indices[1], indices[2]});
-        // std::cout << indices[0] << indices[1] << indices[2] << std::endl;
+        ss << "( " << coeff << " )*";
+        ss << getStringFromTuple({indices[0], indices[1], indices[2]});
+        if (++counter < terms.size()){
+            ss << " + ";
+        }
     }
 
-    return res;
+    return ss.str();
 }
 
 LieAlgebra::LieAlgebra(const std::vector<std::vector<Pair>>& str) {

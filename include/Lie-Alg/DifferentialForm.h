@@ -10,6 +10,8 @@
 #include <map>
 
 #include "Lie-Alg/PairUtils.h"
+#include "Lie-Alg/Polynomials.h"
+
 
 const int DIMENSION = 2*6+1;
 
@@ -28,10 +30,18 @@ const std::array<Triple, 20> basis_3forms = {{
     {3,4,5}, {3,4,6}, {3,5,6}, {4,5,6}
 }};
 
+const std::array<std::array<int, 2>, 20> primitive_basis_3forms = {{
+    {5,5}, {6,6}, {7,7}, {8,8},
+    {11,11}, {12,12}, {13,13}, {14,14}, 
+    {4,9}, {10,15}, {0,18}, {1,19},
+    {2,16}, {3,17}, {9,4}, {15,10}, 
+    {18,0}, {19,1}, {16,2}, {17,3}
+}};
+
 const std::array<std::string, 20> basis_3constants = {{
     "(K+Q)/2", "(L+R)/2", "(M+S)/2", "(N+T)/2",
-    "(I+O)/2", "A", "B", "C",
-    "D", "(O-I)/2", "(J+P)/2", "E",
+    "(Z+O)/2", "A", "B", "C",
+    "D", "(O-Z)/2", "(J+P)/2", "E",
     "F", "G", "H", "(P-J)/2",
     "(S-M)/2", "(T-N)/2", "(Q-K)/2", "(R-L)/2"
 }};

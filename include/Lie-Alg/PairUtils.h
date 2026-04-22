@@ -12,7 +12,7 @@
 
 struct Pair {
     int left;
-    GiNaC::ex right; //
+    GiNaC::ex right;
 };
 
 struct PairLists {
