@@ -106,8 +106,6 @@ On the other hand, as \(\mathrm{im}\mathrm{d}\cap \mathcal{P}^{m}\mathfrak{g}^{*
 
 ## Some Explicit Calculations
 
-## Page 5
-
 Let $V$ be a 6 dimensional real vector space equipped with a symplectic form $/omega$. For any 3-form \(\phi \in \bigwedge^{3}V^{*}\) , we can define \(\mathcal{K}(\phi)\in \operatorname {End}V\otimes \bigwedge^{6}V^{*}\) by
 
 \[
@@ -188,8 +186,6 @@ where \(A,B,\ldots ,S,T\) are constants. And \(\phi\) is primitive if and only i
 For later use, we shall compute the expression of \(\mathcal{K}(\phi)\) , \(\mathcal{F}(\phi)\) , and \(\mathcal{Q}(\phi)\) for \(\phi\) in (2). The explicit values for $F$ for this choice of base can be found in the file Polynomials.cpp, for example the letter A is sent to A_hat. 
 
 ## Examples
-
-## 4 Examples
 
 We want to study the problem of existence and uniqueness of \(\mathcal{F}\) - harmonic forms, and the long- time behavior of the Type IIA flow on symplectic Lie groups with left invariant data. To be more specific, we would like to address the following two questions.
 
