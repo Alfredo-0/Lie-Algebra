@@ -1,5 +1,6 @@
 //main.cpp
 #include "Lie-Alg/DifferentialForm.h"
+#include "Lie-Alg/Polynomials.h"
 #include "Lie-Alg/PairUtils.h"
 #include <ginac/ginac.h>
 #include <iostream>
@@ -7,11 +8,16 @@
 
 
 int main() {
+    initialize_symbols();
 
-    //Triple example = {1,2,5};
-    //std::cout << getStringFromTuple(example) << std::endl;
+    GiNaC::symtab table;
+    for (const auto& [name, sym_ptr] : symbol_table) {
+        table[name] = *sym_ptr;
+    }
 
-    GiNaC::symbol x("x", "\\lambda");
+    GiNaC::parser reader(table);
+
+    GiNaC::symbol x("x");
 
     std::ifstream file(RESOURCES_PATH);
     if (!file) {
@@ -25,11 +31,13 @@ int main() {
         return 1;
     }
     
-    std::string line1, line2;
+    std::string enumeration, line1, line2;
  
-    while(std::getline(file, line1)){
-        if(line1.length() == 0)
+    while(std::getline(file, enumeration, ' ')){
+        if(enumeration.length() == 0)
             continue;
+        
+        std::getline(file, line1);
         std::getline(file, line2);
         
         PairLists lists = readPairLists(line1, line2, x);
@@ -43,7 +51,7 @@ int main() {
 
         omega.inverse();
 
-        outfile << "## Structure constants of the Lie Algebra:\n" << "$(";
+        outfile << "## " << enumeration << " Structure constants of the Lie Algebra:\n" << "$(";
         
         for(int it = 0; it < 6; ++it){
             if (omega.algebra->dOf(it).checkZero())
@@ -64,61 +72,58 @@ int main() {
         std::multiset<std::pair<DifferentialForm, DifferentialForm>, PairComparator> image;
         std::pair<DifferentialForm, DifferentialForm> pairForm;
 
+        // new code here
         outfile<<"### Derivatives of $3-$forms\n";
 
-        for(const auto& form : basis_3forms){
-            DifferentialForm alpha({form[0], form[1], form[2]}, 1.0);
-            DifferentialForm dalpha = alpha.exteriorDerivative();
-
-            if(!dalpha.checkZero()){
-                pairForm = std::make_pair(dalpha, alpha);   
-                image.insert(pairForm);
+        for(const auto& terms : primitive_basis_3forms){
+            DifferentialForm gamma;
+            if (terms[0] == terms[1])
+                gamma.addTerm({basis_3forms[terms[0]][0],basis_3forms[terms[0]][1],basis_3forms[terms[0]][2]}, 1.0);
+            else if (terms[0] < terms[1]){
+                gamma.addTerm({basis_3forms[terms[0]][0],basis_3forms[terms[0]][1],basis_3forms[terms[0]][2]}, 1.0);
+                gamma.addTerm({basis_3forms[terms[1]][0],basis_3forms[terms[1]][1],basis_3forms[terms[1]][2]}, -1.0);
             }
             else{
-                kernel.insert(alpha);
-            }        
+                gamma.addTerm({basis_3forms[terms[0]][0],basis_3forms[terms[0]][1],basis_3forms[terms[0]][2]}, 1.0);
+                gamma.addTerm({basis_3forms[terms[1]][0],basis_3forms[terms[1]][1],basis_3forms[terms[1]][2]}, 1.0);
+            }
+
+            DifferentialForm dgamma = gamma.exteriorDerivative();
+            
+            if(!dgamma.checkZero()){
+                pairForm = std::make_pair(dgamma, gamma);   
+                image.insert(pairForm);
+            }         
         }
 
-        for(const auto& result: image)
-            outfile << "$" << result.second.getLetters() <<", \\ \\ d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+        GiNaC::lst closed_conditions;
 
-        outfile << "$Ker(d^3) \\supset \\{";
-        for(const auto& result : kernel)
-            outfile << result.toLaTeX() << ", \\ ";
-        outfile << "\\}$ \n\n";
+        for(const auto& result: image){
+            GiNaC::ex coef1 = reader(result.second.getLetters());
+            outfile << "$" << coef1 <<", \\ \\ d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "$\n\n";
+            closed_conditions.append(coef1 == 0); 
+        }
 
         image.clear();
         kernel.clear();
         
-        outfile<<"### Derivatives of $2-$forms\n";
+        // new code ends here
 
-        for(const auto& form : basis_2forms){
-            DifferentialForm beta({form.i, form.j}, 1.0);
-            DifferentialForm dbeta = beta.exteriorDerivative();
+        outfile<<"### $d \\Lambda d$ of $3-$forms.\n\n";
 
-            if(!dbeta.checkZero()){
-                pairForm = std::make_pair(dbeta, beta);   
-                image.insert(pairForm);
+        for(const auto& terms : primitive_basis_3forms){
+            DifferentialForm gamma;
+            if (terms[0] == terms[1])
+                gamma.addTerm({basis_3forms[terms[0]][0],basis_3forms[terms[0]][1],basis_3forms[terms[0]][2]}, 1.0);
+            else if (terms[0] < terms[1]){
+                gamma.addTerm({basis_3forms[terms[0]][0],basis_3forms[terms[0]][1],basis_3forms[terms[0]][2]}, 1.0);
+                gamma.addTerm({basis_3forms[terms[1]][0],basis_3forms[terms[1]][1],basis_3forms[terms[1]][2]}, -1.0);
             }
             else{
-                kernel.insert(beta);
+                gamma.addTerm({basis_3forms[terms[0]][0],basis_3forms[terms[0]][1],basis_3forms[terms[0]][2]}, 1.0);
+                gamma.addTerm({basis_3forms[terms[1]][0],basis_3forms[terms[1]][1],basis_3forms[terms[1]][2]}, 1.0);
             }
-        }   
 
-        for(const auto& result: image)
-            outfile << "$d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << ", \\ \\ " << result.first.getLetters() << "$\n\n";
-
-        outfile << "$Ker(d^2) \\supset \\{";
-        for(const auto& result : kernel)
-            outfile << result.toLaTeX() << ", \\ ";
-        outfile << "\\}$ \n\n";
-
-        image.clear();
-        kernel.clear();
-
-        outfile<<"### $d \\Lambda d$ of $3-$forms\n";
-        for(const auto& form : basis_3forms){
-            DifferentialForm gamma({form[0], form[1], form[2]}, 1.0);
             DifferentialForm dgamma = gamma.exteriorDerivative();
             DifferentialForm ldgamma = dgamma.interiorProduct(omega.inverse());
             DifferentialForm dldgamma = ldgamma.exteriorDerivative();
@@ -127,17 +132,74 @@ int main() {
                 pairForm = std::make_pair(dldgamma, gamma);   
                 image.insert(pairForm);
             } 
+
+        }
+        
+        GiNaC::lst vars;
+        GiNaC::lst subs1;
+        GiNaC::lst subs2;
+        GiNaC::lst equations;
+        
+        std::set<GiNaC::symbol, GiNaC::ex_is_less> symbol_set;
+        
+        for(const auto& result: image){
+            GiNaC::ex coef1 = reader(result.second.getLetters());
+            GiNaC::ex coef2 = reader(result.first.getLetters());
+            
+            std::string name = ex_to<GiNaC::symbol>(coef1).get_name() + "_hat";  
+            subs2.append(coef1 == *expr_hat[name]);
+            
+            equations.append(coef2 == coef1); 
+
+            if ( coef2.nops() == 0 ){
+                symbol_set.insert(ex_to<GiNaC::symbol>(coef2));
+            }
+            else{
+                for (size_t i = 0; i < coef2.nops(); ++i) {
+                    if(coef2.op(i).nops() > 0){
+                        symbol_set.insert(ex_to<GiNaC::symbol>(coef2.op(i).op(0)));
+                    }
+                    else if (is_a<GiNaC::symbol>(coef2.op(i))) {
+                        symbol_set.insert(ex_to<GiNaC::symbol>(coef2.op(i)));
+                    }
+                }
+            }
+            outfile << "$" << coef1 << ", \\ \\ d \\Lambda d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "\\ \\ " << coef2 <<"$\n\n";
+        }
+        
+        for (const GiNaC::symbol &s : symbol_set) {
+            vars.append(s);
+            subs1.append(s == 0);
+        }
+        
+        GiNaC::lst solutions = ex_to<GiNaC::lst>(GiNaC::lsolve(equations, vars));
+
+        std::cout<<equations<<" - "<<solutions<<std::endl;
+
+        outfile << "### ODE system \n";
+
+        outfile << GiNaC::latex;
+
+        int counter = 0;
+        for (const auto sol : solutions){
+            outfile << "$\\partial_t "<< sol.lhs() << " = " << collect((sol.rhs().subs(subs2)).expand() - (sol.rhs().subs(subs2).subs(subs1)).expand(), vars) << "$\n" <<std::endl;
+            counter++;    
         }
 
-        for(const auto& result: image)
-            outfile << "$" << result.second.getLetters() << ", \\ \\ d \\Lambda d("<<result.second.toLaTeX() << ")  = " << result.first.toLaTeX() << "\\ \\ " << result.first.getLetters() <<"$\n\n";
+        outfile << "### ODE system with closed 3-forms\n";
 
+        counter = 0;
+        for (const auto sol : solutions){
+            outfile << "$\\partial_t "<< sol.lhs() << " = " << collect((sol.rhs().subs(subs2)).expand() - (sol.rhs().subs(subs2).subs(subs1)).expand(), vars).subs(closed_conditions) << "$\n" <<std::endl;
+            counter++;    
+        }
+
+        
 
         image.clear();
         kernel.clear();
                  
         outfile << "\\pagebreak\n\n";
-
     }
 
     outfile.close();

@@ -12,7 +12,7 @@
 
 struct Pair {
     int left;
-    GiNaC::ex right; //
+    GiNaC::ex right;
 };
 
 struct PairLists {
@@ -51,7 +51,7 @@ inline std::vector<std::vector<Pair>> parseLine(const std::string &line, const G
         std::istringstream tokenStream(token);
         std::vector<Pair> pairs;
         int left;
-        std::string right; //
+        std::string right; 
 
         while (tokenStream >> left >> right) {
             GiNaC::symtab table;
